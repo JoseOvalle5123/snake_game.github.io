@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Snake PWA</title>
+    <meta name="description" content="Snake infernal con skins, habilidades y bosses. Instálalo y juega sin conexión." />
+    <!-- Responsive -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#4CAF50" />
+    <!-- ICONO PESTAÑA -->
+    <link rel="icon" type="image/svg+xml" href="icon/descarga.svg" />
+    <!-- PWA (iOS necesita un PNG para el ícono de pantalla de inicio) -->
+    <link rel="apple-touch-icon" href="icon/apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="Snake" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <link rel="manifest" href="manifest.json" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="game-container">
+      <h1 class="title">
+        <img
+          src="icon/icon_title.webp"
+          class="title-icon"
+          alt="Snake Infernal"
+        />
+        Snake Game
+      </h1>
+      <!-- BARRA DE INFORMACIÓN SUPERIOR -->
+      <div class="info-bar">
+        <!-- Izquierda: Score y Level -->
+        <div class="info-left">
+          <div class="stat">
+            <span class="stat-label score-label">SCORE</span>
+            <span class="stat-value" id="score">0</span>
+          </div>
+          <div class="stat">
+            <span class="stat-label level-label">LEVEL</span>
+            <span class="stat-value" id="level">1</span>
+          </div>
+        </div>
+        <!-- Centro: Botón Pause -->
+        <button id="pause-btn" class="pause-button">PAUSE</button>
+        <!-- Derecha: Energía y Habilidad -->
+        <div class="info-right" id="ability-info">
+          <span class="ability-name" id="ability-name">HABILIDAD</span>
+          <div class="energy-container">
+            <div class="energy-bar">
+              <div class="energy-fill" id="energy-fill"></div>
+            </div>
+            <span class="energy-text" id="energy-text">⚡100/25</span>
+          </div>
+        </div>
+      </div>
+      <!-- CANVAS (la resolución interna se ajusta en game.js según la pantalla) -->
+      <canvas id="game" width="450" height="450"></canvas>
+      <!-- CONTROLES TÁCTILES -->
+      <div class="controls">
+        <div class="row">
+          <button data-dir="UP" aria-label="Arriba">⬆️</button>
+        </div>
+        <div class="row">
+          <button data-dir="LEFT" aria-label="Izquierda">⬅️</button>
+          <!-- BOTÓN DE HABILIDAD (REDONDO) -->
+          <button id="ability-btn" class="ability-button" title="Usar Habilidad (Espacio)" aria-label="Usar habilidad">⚡</button>
+          <button data-dir="RIGHT" aria-label="Derecha">➡️</button>
+        </div>
+        <div class="row">
+          <button data-dir="DOWN" aria-label="Abajo">⬇️</button>
+        </div>
+      </div>
+      <p class="hint">P = Pausa | Espacio o ⚡ = Habilidad | Flechas, WASD o deslizar</p>
+      <div class="footer-row">
+        <button id="mute-btn" class="icon-btn" type="button" aria-label="Silenciar" aria-pressed="false">🔊</button>
+        <button id="install-btn" class="install-btn" type="button" hidden>Instalar app</button>
+      </div>
+    </div>
+    <script src="game.js"></script>
+    <script>
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", () => {
+          navigator.serviceWorker
+            .register("service-worker.js", { updateViaCache: "none" })
+            .catch((err) => console.warn("Service worker no registrado:", err));
+        });
+      }
+    </script>
+  </body>
+</html>

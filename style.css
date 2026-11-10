@@ -1,0 +1,475 @@
+/* ================= RESET ================= */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+  overscroll-behavior: none;
+  touch-action: manipulation;
+}
+
+/* ================= BODY ================= */
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: "Segoe UI", Arial, sans-serif;
+  background: radial-gradient(circle at top, #1b1b2f, #0f0f1a);
+  color: #fff;
+
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+/* ================= CONTENEDOR ================= */
+.game-container {
+  background: linear-gradient(145deg, #111, #1e1e1e);
+  padding: 20px;
+  border-radius: 20px;
+  text-align: center;
+  width: 90vw;
+  max-width: 500px;
+  box-shadow:
+    0 0 30px rgba(76, 175, 80, 0.6),
+    inset 0 0 20px rgba(0, 0, 0, 0.9);
+}
+
+/* ================= TÍTULO ================= */
+.title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-family: 'Arial', sans-serif;
+  color: #f5f5f5;
+  font-size: clamp(1.2rem, 4vw, 1.8rem);
+  margin-bottom: 10px;
+}
+
+.title-icon {
+  width: clamp(32px, 8vw, 48px);
+  height: clamp(32px, 8vw, 48px);
+  filter: drop-shadow(0 0 8px #00ffff);
+}
+
+/* ================= HUD ANTIGUO (OCULTO) ================= */
+.hud {
+  display: none; /* Ocultamos el HUD viejo */
+}
+
+/* ================= BARRA DE INFORMACIÓN SUPERIOR ================= */
+.info-bar {
+  width: 100%;
+  max-width: 450px;
+  height: 45px;
+  background: rgba(0, 0, 0, 0.85);
+  border: 2px solid rgba(255, 59, 31, 0.9);
+  border-bottom: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 15px;
+  color: white;
+  margin: 0 auto 0 auto;
+  border-radius: 14px 14px 0 0;
+  box-shadow: 0 0 15px rgba(255, 59, 31, 0.6);
+}
+
+/* Sección izquierda - Score y Level */
+.info-left {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.stat-label {
+  font-size: 11px;
+  font-weight: bold;
+  opacity: 0.8;
+  letter-spacing: 0.5px;
+}
+
+.stat-value {
+  font-size: 18px;
+  font-weight: bold;
+  color: #ffffff;
+}
+
+.score-label { 
+  color: #FFD700; 
+}
+
+.level-label { 
+  color: #00BFFF; 
+}
+
+/* Botón Pause en el centro */
+.pause-button {
+  background: rgba(255, 0, 0, 0.7);
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  color: white;
+  padding: 8px 22px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.2s;
+  text-transform: uppercase;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.pause-button:hover {
+  background: rgba(255, 0, 0, 0.9);
+  transform: scale(1.05);
+}
+
+.pause-button:active {
+  transform: scale(0.95);
+  box-shadow: 0 0 15px rgba(255, 0, 0, 0.8);
+}
+
+/* Sección derecha - Energía y habilidad */
+.info-right {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 140px;
+}
+
+.info-right.hidden {
+  visibility: hidden;
+}
+
+.ability-name {
+  font-size: 11px;
+  font-weight: bold;
+  color: #ff00ff;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.energy-container {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.energy-bar {
+  width: 140px;
+  height: 12px;
+  background: rgba(50, 50, 50, 0.9);
+  border: 1px solid #fff;
+  border-radius: 2px;
+  overflow: hidden;
+  position: relative;
+}
+
+.energy-fill {
+  height: 100%;
+  background: #4CAF50;
+  transition: width 0.3s ease, background-color 0.3s ease;
+  width: 100%;
+}
+
+.energy-fill.active {
+  background: #FFD700;
+  box-shadow: 0 0 10px #FFD700;
+}
+
+.energy-fill.medium {
+  background: #FFA500;
+}
+
+.energy-fill.low {
+  background: #ff0000;
+}
+
+.energy-text {
+  font-size: 9px;
+  color: #ffffff;
+  text-align: center;
+}
+
+/* ================= CANVAS ================= */
+canvas {
+  background: radial-gradient(circle at center, #0a0a0a, #000);
+  border-radius: 0 0 14px 14px;
+  border: 3px solid #ff3b1f;
+  border-top: none; /* Sin borde superior para conectar con la barra */
+  box-shadow:
+    0 0 20px rgba(255, 59, 31, 0.8),
+    inset 0 0 25px rgba(0, 0, 0, 0.9);
+
+  /* El arte son sprites suaves y el canvas ya usa alta resolución: sin "pixelated" */
+  image-rendering: auto;
+
+  /* Hacer el canvas responsive */
+  width: 100%;
+  max-width: 450px;
+  height: auto;
+  aspect-ratio: 1;
+
+  /* CLAVE PARA MÓVIL */
+  touch-action: none;
+  display: block;
+  margin: 0 auto;
+}
+
+/* ================= CONTROLES TÁCTILES ================= */
+.controls {
+  margin-top: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+
+  /* evita scroll fantasma */
+  touch-action: manipulation;
+}
+
+.controls .row {
+  display: flex;
+  gap: clamp(10px, 2vw, 14px);
+  justify-content: center;
+  align-items: center;
+}
+
+/* ================= BOTONES DE DIRECCIÓN ================= */
+.controls button[data-dir] {
+  width: clamp(55px, 12vw, 70px);
+  height: clamp(55px, 12vw, 70px);
+  font-size: clamp(1.3rem, 3vw, 1.8rem);
+  border-radius: 16px;
+  border: 2px solid #4CAF50;
+  background: radial-gradient(circle, #2b2b2b, #111);
+  color: #fff;
+  box-shadow:
+    0 0 12px rgba(76, 175, 80, 0.7),
+    inset 0 0 10px rgba(0, 0, 0, 0.9);
+
+  /* MUY IMPORTANTE */
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  cursor: pointer;
+}
+
+/* Feedback táctil */
+.controls button[data-dir]:active {
+  transform: scale(0.88);
+  box-shadow: 0 0 20px #4CAF50;
+}
+
+/* ================= BOTÓN DE HABILIDAD (REDONDO) ================= */
+.ability-button {
+  width: clamp(60px, 13vw, 75px) !important;
+  height: clamp(60px, 13vw, 75px) !important;
+  border-radius: 50% !important; /* REDONDO */
+  font-size: clamp(1.5rem, 3.5vw, 2rem);
+  border: 3px solid #FFD700 !important;
+  background: radial-gradient(circle, #4a2d00, #1a0f00) !important;
+  color: #FFD700 !important;
+  box-shadow:
+    0 0 20px rgba(255, 215, 0, 0.8),
+    inset 0 0 15px rgba(0, 0, 0, 0.9) !important;
+  
+  position: relative;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  
+  /* Animación de pulso */
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.6), inset 0 0 15px rgba(0, 0, 0, 0.9);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(255, 215, 0, 1), inset 0 0 15px rgba(0, 0, 0, 0.9);
+  }
+}
+
+.ability-button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 35px rgba(255, 215, 0, 1), inset 0 0 15px rgba(0, 0, 0, 0.9);
+}
+
+.ability-button:active {
+  transform: scale(0.85);
+  box-shadow: 0 0 40px #FFD700, inset 0 0 20px rgba(255, 215, 0, 0.5);
+  background: radial-gradient(circle, #6a4d00, #2a1f00) !important;
+}
+
+/* Estado deshabilitado (sin energía) */
+.ability-button.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  border-color: #666 !important;
+  color: #666 !important;
+  box-shadow: 0 0 10px rgba(100, 100, 100, 0.3), inset 0 0 10px rgba(0, 0, 0, 0.9) !important;
+  animation: none;
+}
+
+.ability-button.disabled:active {
+  transform: none;
+}
+
+/* ================= RESPONSIVE PARA MÓVILES ================= */
+@media (max-width: 480px) {
+  .game-container {
+    padding: 15px;
+    width: 95vw;
+  }
+  
+  canvas {
+    max-width: 100%;
+  }
+  
+  .info-bar {
+    padding: 0 10px;
+    height: 42px;
+  }
+  
+  .info-left {
+    gap: 12px;
+  }
+  
+  .stat-value {
+    font-size: 16px;
+  }
+  
+  .pause-button {
+    padding: 6px 16px;
+    font-size: 12px;
+  }
+  
+  .info-right {
+    min-width: 110px;
+  }
+  
+  .energy-bar {
+    width: 110px;
+    height: 10px;
+  }
+  
+  .ability-name {
+    font-size: 10px;
+  }
+}
+
+/* Pantallas muy pequeñas */
+@media (max-width: 360px) {
+  .game-container {
+    padding: 10px;
+  }
+  
+  .controls {
+    margin-top: 10px;
+    gap: 8px;
+  }
+  
+  .controls .row {
+    gap: 8px;
+  }
+  
+  .info-bar {
+    height: 40px;
+    padding: 0 8px;
+  }
+  
+  .info-left {
+    gap: 10px;
+  }
+  
+  .stat-label {
+    font-size: 10px;
+  }
+  
+  .stat-value {
+    font-size: 14px;
+  }
+  
+  .pause-button {
+    padding: 5px 12px;
+    font-size: 11px;
+  }
+  
+  .info-right {
+    min-width: 90px;
+  }
+  
+  .energy-bar {
+    width: 90px;
+  }
+}
+
+/* Pantallas grandes */
+@media (min-width: 768px) {
+  .game-container {
+    max-width: 550px;
+  }
+  
+  canvas {
+    max-width: 500px;
+  }
+  
+  .info-bar {
+    max-width: 500px;
+  }
+}
+
+/* ================= HINT TEXT ================= */
+.hint {
+  margin-top: 15px;
+  font-size: clamp(0.85rem, 2.5vw, 1rem);
+  color: #888;
+  font-style: italic;
+}
+/* ================= SILENCIO E INSTALAR ================= */
+.footer-row {
+  margin-top: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+}
+
+.icon-btn,
+.install-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: #fff;
+  border-radius: 10px;
+  padding: 8px 14px;
+  font-size: 1rem;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.icon-btn:active,
+.install-btn:active {
+  transform: scale(0.94);
+}
+
+.install-btn {
+  border-color: #4caf50;
+  font-size: 0.9rem;
+  font-weight: bold;
+}
+
+.install-btn[hidden] {
+  display: none;
+}

@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ff3b1f"></stop>
+      <stop offset="100%" stop-color="#4a0000"></stop>
+    </linearGradient>
+  </defs>
+
+  <!-- cuerpo -->
+  <path d="M10 40
+           C20 20, 40 20, 50 30
+           C58 38, 45 50, 32 45
+           C20 40, 18 50, 28 54" fill="none" stroke="url(#g)" stroke-width="6" stroke-linecap="round"></path>
+
+  <!-- cabeza -->
+  <circle cx="50" cy="30" r="5" fill="#2b0000"></circle>
+
+  <!-- ojos -->
+  <circle cx="48.5" cy="29" r="1" fill="#ff0000"></circle>
+  <circle cx="51.5" cy="29" r="1" fill="#ff0000"></circle>
+</svg>
